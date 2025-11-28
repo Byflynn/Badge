@@ -1,0 +1,725 @@
+
+<html lang="kk">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Бейдж & Достық Банкі</title>
+		<link rel="stylesheet" href="styles.css">
+		<!-- Favicon -->
+		<link rel="icon" href="fav/quality.png" type="image/png">
+	<meta name="description" content="Цифрлық бейджтер мен достық банкі — оқу жетістіктерін және жақсы істерді жазып отыратын орын">
+</head>
+<body>
+	<div class="container">
+		<header class="header">
+			<div class="site-brand">
+				<div class="site-logo">
+					<img src="fav/quality.png" alt="Бейдж логотип" class="site-logo-img">
+				</div>
+				<div>
+					<div class="site-title">Бейдж & Достық Банкі</div>
+					<div class="site-sub">Цифрлық бейджтер — жақсы істерді бағалаймыз</div>
+					<button id="seedDemoBtn" class="btn" style="margin-bottom:8px">Создать demo учеников</button>
+				</div>
+			</div>
+			<div class="actions">
+			</div>
+		</header>
+
+		<section class="hero">
+			<!-- Left column: photos above heading -->
+			<div class="hero-left">
+				<div class="hero-photos" aria-hidden="true">
+					<img class="accent-photo" src="img/pexels-yankrukov-8613089.jpg" alt="Оқушылар суреті 1">
+					<img class="accent-photo" src="img/pexels-olia-danilevich-5088188.jpg" alt="Оқушылар суреті 2">
+				</div>
+				<div class="hero-text">
+					<h1>Оқушылардың жақсы істерін бағалаңыз</h1>
+					<p class="small">Бұл сайт жеңіл цифрлық бейдж жүйесі. Бейджтерді тағайындау, оқушы профильдері және Достық Банкі — бәрі бір жерде.</p>
+				</div>
+			</div>
+			<!-- Registration / Auth card (Firebase) -->
+			<div class="register-card" aria-labelledby="regHeading">
+				<h3 id="regHeading">Тіркелу</h3>
+				<!-- Toggle links + Google sign-in (all inline) -->
+				<div style="display:flex;gap:10px;align-items:center;margin-bottom:22px">
+					<button id="showRegister" class="btn secondary" type="button">Тіркелу</button>
+					<button id="showLogin" class="btn" type="button">Кіру</button>
+					<button id="googleSign" class="btn google" type="button">Кіру Google арқылы</button>
+				</div>
+				<form id="registerForm" style="display:block">
+					<div class="form-row">
+					  <label for="r_role">Түрі</label>
+					  <select id="r_role" name="role" required>
+					    <option value="student">Оқушы</option>
+					    <option value="teacher">Мұғалім</option>
+					  </select>
+					</div>
+					<div class="form-row">
+						<label for="r_name">Аты-жөні</label>
+						<input id="r_name" name="name" >
+					</div>
+					<div id="studentFields">
+					  <div class="form-row">
+						<label for="r_id">Оқушы ID</label>
+						<input id="r_id" name="studentId" >
+					  </div>
+
+					<!-- class field moved inside studentFields above -->
+					</div>
+
+					<div id="teacherFields" style="display:none">
+					  <div class="form-row">
+						<label for="r_teacherKey">Мұғалім коды (егер бар болса)</label>
+						<input id="r_teacherKey" name="teacherKey" type="password" placeholder="Тек мұғалімге">
+					  </div>
+					</div>
+
+					<div class="form-row">
+						<label for="r_class">Сынып</label>
+						<input id="r_class" name="class" >
+					</div>
+					<div class="form-row">
+						<label for="r_email">Email</label>
+						<input id="r_email" name="email" type="email" >
+					</div>
+					<div class="form-row">
+						<label for="r_password">Жасырын сөз</label>
+						<input id="r_password" name="password" type="password" required placeholder="••••••••">
+					</div>
+					<button class="btn" id="registerSubmit" type="submit">Тіркелу</button>
+					<div id="regMsg" class="msg" style="display:none"></div>
+				</form>
+				<form id="loginForm" style="display:none">
+					<div class="form-row">
+						<label for="l_email">Email</label>
+						<input id="l_email" name="email" type="email" >
+					</div>
+					<div class="form-row">
+						<label for="l_password">Жасырын сөз</label>
+						<input id="l_password" name="password" type="password" required placeholder="••••••">
+					</div>
+					<button class="btn" id="loginSubmit" type="submit">Кіру</button>
+					<div id="loginMsg" class="msg" style="display:none"></div>
+				</form>
+				<div class="helper"></div>
+			</div>
+		</section>
+
+		<main class="grid" role="main">
+			<section class="card" aria-labelledby="badgesHeading">
+				<h2 id="badgesHeading">1. Бейдж галереясы</h2>
+				<p class="small">Кез келген бейджді бассаңыз — сипаттама шығады.</p>
+				<div class="grid" id="badgeGrid" aria-live="polite"></div>
+			</section>
+
+			<section class="card" aria-labelledby="studentsHeading">
+				<h2 id="studentsHeading">2. Оқушылар</h2>
+				<p class="small">Оқушы профилін ашу үшін басыңыз.</p>
+				<div id="studentList" class="card-list"></div>
+				<!-- larger decorative student photo placed at bottom of this card -->
+				<div class="student-photo-wrap" aria-hidden="true">
+					<img class="student-photo" src="img/pexels-norma-mortenson-8457298.jpg" alt="Оқушылар суреті">
+				</div>
+			</section>
+
+			<section class="card" aria-labelledby="kindnessHeading">
+				<h2 id="kindnessHeading">3. Достық Банкі</h2>
+				<p class="small"></p>
+				<div id="kindnessList" class="klist"></div>
+			</section>
+		</main>
+
+		<div id="teacherPanel" style="display:none">
+			<h2>Бейдж беру</h2>
+			<select id="awardStudentSelect"></select>
+			<select id="awardBadgeSelect"></select>
+			<input id="awardComment" placeholder="Комментарий (не обязательно)">
+			<button id="giveAwardBtn">Беріп жіберу</button>
+
+			<hr>
+
+			<h2>Достық Банкі</h2>
+			<select id="kindnessStudentSelect"></select>
+			<input id="kindnessText" placeholder="Жақсы ісін жазу">
+			<button id="addKindnessBtn">Қосу</button>
+  
+			<hr>
+
+			<h2>Ата-анаға QR код</h2>
+			<div style="display:flex;gap:8px;align-items:center">
+				<select id="qrStudentSelect"></select>
+				<button id="genQRBtn" class="btn">QR жасау</button>
+			</div>
+			<div id="qrBox" style="margin-top:10px"></div>
+			<div id="qrUrl" class="small" style="margin-top:6px"></div>
+
+								<hr>
+								<h3>Оқушылар тізімі</h3>
+								<div id="studentsList" class="card-list" style="margin-top:8px"></div>
+
+								<hr>
+								<h3>Жақсы идеялар</h3>
+								<div id="kindnessIdeas" style="margin-top:8px"></div>
+		</div>
+
+<div id="studentPanel" style="display:none; padding:20px;">
+  <h2>Менің бейдждерім</h2>
+  <div id="myBadges"></div>
+
+  <h2>Достық Банкі</h2>
+  <div id="myKindness"></div>
+</div>
+
+
+		<footer>
+			&copy; 2025 Бейдж & Достық Банкі — құрылған оқушылардың жақсы істерін қолдау үшін
+		</footer>
+	</div>
+
+	<script>
+	// FRONTEND STATIC DATA (you can later replace with Google Sheets fetch)
+	// Restored 4-image badge gallery (use files from `badges/` folder)
+	const badges=[
+		{title:"Супер оқырман",desc:"Аптасына 2–3 кітап оқығаны үшін",img:"badges/badge3.jpeg"},
+		{title:"Таза қол – таза парта",desc:"Тазалық сақтағаны үшін",img:"badges/badge2.jpeg"},
+		{title:"Математика шебері",desc:"Есептерді дұрыс шығарғаны үшін",img:"badges/badge4.jpeg"},
+		{title:"Сынып көшбасшысы",desc:"Ұйымдастыру қабілеті үшін",img:"badges/badge1.jpeg"}
+	];
+
+	const students=[
+		{id:"ARUZHAN01",name:"Аружан"},
+		{id:"NURISLAM02",name:"Нұрислам"}
+	];
+
+	const kindness=[
+		{"text":"Парты жинауға көмектесті","date":"2025-11-20"},
+		{"text":"Досына қалам сыйлады","date":"2025-11-22"}
+	];
+
+	// badges render (use image when available, fallback to emoji)
+	const badgeGrid=document.getElementById('badgeGrid');
+	badges.forEach(b=>{
+		const node = document.createElement('div');
+		node.className = 'badge';
+		const icon = b.img
+		  ? `<img class="badge-img" src="${b.img}" alt="${b.title}">`
+		  : `<div class='emoji'>${b.svg || '🏅'}</div>`;
+		node.innerHTML = `${icon}<b>${b.title}</b><div class='small'>${b.desc}</div>`;
+		node.tabIndex = 0;
+		node.setAttribute('role','button');
+		node.addEventListener('click', ()=> alert(`${b.title}\n\n${b.desc}`));
+		node.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); node.click(); } });
+		badgeGrid.appendChild(node);
+	});
+
+
+	// populate awardBadgeSelect so teachers can pick a badge to give
+	try{
+		const awardBadgeSelect = document.getElementById('awardBadgeSelect');
+		if(awardBadgeSelect){
+			awardBadgeSelect.innerHTML = '';
+			badges.forEach(b=>{
+				const opt = document.createElement('option');
+				opt.value = b.title;
+				opt.textContent = b.title + ' — ' + (b.desc||'');
+				awardBadgeSelect.appendChild(opt);
+			});
+		}
+	}catch(e){ console.warn('awardBadgeSelect fill failed', e); }
+
+	// students render
+	const studentList=document.getElementById('studentList');
+	students.forEach(s=>{
+		const node = document.createElement('div');
+		node.className = 'card-link';
+		node.tabIndex = 0;
+		node.innerHTML = `<div><b>${s.name}</b><div class='small'>ID: ${s.id}</div></div><div class='small' aria-hidden='true'>›</div>`;
+		node.addEventListener('click', ()=> location.href = `student.html?id=${s.id}`);
+		node.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); node.click(); } });
+		studentList.appendChild(node);
+	});
+
+	// kindness render
+	const kindList=document.getElementById('kindnessList');
+	kindness.forEach(k=>{
+		const node = document.createElement('div');
+		node.className = 'card';
+		node.innerHTML = `<div><b>${k.text}</b></div><div class='small'>${k.date}</div>`;
+		kindList.appendChild(node);
+	});
+
+	// ---------------- Registration now uses Firebase Firestore ----------------
+	// See the module script below which initializes Firebase and writes to 'registrations' collection.
+	// (Firebase init is in a separate module script tag - replace firebaseConfig values there.)
+
+	</script>
+
+	<!-- Firebase module: initialize and write registration to Firestore -->
+	<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { 
+  getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs, query, where 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { 
+  getAuth, GoogleAuthProvider, signInWithPopup, 
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+  signOut, onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+/* -------------------------------------------------------
+    FIREBASE INIT
+--------------------------------------------------------*/
+
+const firebaseConfig = {
+  apiKey: "AIzaSyClcGOXzsKJJznQBVzwBSyyOgjNAJ_01dU",
+  authDomain: "beydj-site-prototype.firebaseapp.com",
+  projectId: "beydj-site-prototype",
+  storageBucket: "beydj-site-prototype.appspot.com",
+  messagingSenderId: "431985222918",
+  appId: "1:431985222918:web:a774d018d9087fc67dea87",
+  measurementId: "G-R5CD3SCW45"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* -------------------------------------------------------
+    FORM SWITCHING (REGISTER <-> LOGIN)
+--------------------------------------------------------*/
+
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
+
+// explicit element bindings (avoid relying on implicit globals in module scope)
+const r_name = document.getElementById('r_name');
+const r_id = document.getElementById('r_id');
+const r_class = document.getElementById('r_class');
+const r_email = document.getElementById('r_email');
+const r_password = document.getElementById('r_password');
+const r_role = document.getElementById('r_role');
+const r_teacherKey = document.getElementById('r_teacherKey');
+const l_email = document.getElementById('l_email');
+const l_password = document.getElementById('l_password');
+const awardStudentSelect = document.getElementById('awardStudentSelect');
+const awardBadgeSelect = document.getElementById('awardBadgeSelect');
+const awardComment = document.getElementById('awardComment');
+const kindnessStudentSelect = document.getElementById('kindnessStudentSelect');
+const kindnessText = document.getElementById('kindnessText');
+const seedDemoBtn = document.getElementById('seedDemoBtn');
+const genQRBtn = document.getElementById('genQRBtn');
+
+showRegister.addEventListener('click', () => {
+  registerForm.style.display = "block";
+  loginForm.style.display = "none";
+  showRegister.classList.add("secondary");
+  showLogin.classList.remove("secondary");
+});
+
+showLogin.addEventListener('click', () => {
+  registerForm.style.display = "none";
+  loginForm.style.display = "block";
+  showLogin.classList.add("secondary");
+  showRegister.classList.remove("secondary");
+});
+
+/* -------------------------------------------------------
+    FIRESTORE FUNCTIONS
+--------------------------------------------------------*/
+
+async function giveAward(studentId, badgeCode, comment = "") {
+  return addDoc(collection(db, "awards"), {
+    studentId,
+    badgeCode,
+    comment,
+    teacherUid: auth.currentUser.uid,
+    createdAt: new Date().toISOString()
+  });
+}
+
+async function addKindness(studentId, text) {
+  return addDoc(collection(db, "kindness"), {
+    studentId,
+    text,
+    date: new Date().toISOString().slice(0, 10),
+    teacherUid: auth.currentUser.uid
+  });
+}
+
+/* -------------------------------------------------------
+    UI PANELS
+--------------------------------------------------------*/
+
+async function showStudentPanel(profile) {
+	document.querySelector(".register-card").style.display = "none";
+	document.getElementById("teacherPanel").style.display = "none";
+	document.getElementById("studentPanel").style.display = "block";
+
+	document.querySelector(".hero-text").innerHTML = `
+		<h1>👋 Сәлем, ${profile.name}!</h1>
+		<p>${profile.class || ''} сыныбы</p>
+	`;
+
+	// load collected badges (awards) for this student
+	const myBadgesEl = document.getElementById('myBadges');
+	myBadgesEl.innerHTML = '<em>Жүктелуде…</em>';
+	try{
+		if (!profile || !profile.studentId) {
+			myBadgesEl.innerHTML = '<div class="small">Оқушы ID табылмады — бейдждерді жүктеу мүмкін емес.</div>';
+		} else {
+			const awardsQ = query(collection(db,'awards'), where('studentId','==', profile.studentId));
+			const awardsSnap = await getDocs(awardsQ);
+			if(awardsSnap.empty){
+				myBadgesEl.innerHTML = '<div class="small">Бейдждер әлі жоқ.</div>';
+			} else {
+				myBadgesEl.innerHTML = '';
+				awardsSnap.forEach(docSnap => {
+					const a = docSnap.data();
+					const b = badges.find(x => x.title === a.badgeCode) || {};
+					const img = b.img ? `<img src="${b.img}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-right:8px">` : '';
+					const when = a.createdAt ? (new Date(a.createdAt)).toLocaleDateString() : '';
+					const row = document.createElement('div');
+					row.className = 'card-link';
+					row.style.alignItems = 'center';
+					row.innerHTML = `<div style="display:flex;align-items:center">${img}<div><b>${a.badgeCode}</b><div class=\"small\">${a.comment||''}</div></div></div><div class=\"small\">${when}</div>`;
+					myBadgesEl.appendChild(row);
+				});
+			}
+		}
+	}catch(err){ myBadgesEl.innerHTML = '<div class="small">Қате жүктеу: '+err.message+'</div>'; }
+
+	// load kindness entries for this student
+	const myKindEl = document.getElementById('myKindness');
+	myKindEl.innerHTML = '<em>Жүктелуде…</em>';
+	try{
+		if (!profile || !profile.studentId) {
+			myKindEl.innerHTML = '<div class="small">Оқушы ID табылмады — достық банкін көрсету мүмкін емес.</div>';
+		} else {
+			const kQ = query(collection(db,'kindness'), where('studentId','==', profile.studentId));
+			const kSnap = await getDocs(kQ);
+			if(kSnap.empty){ myKindEl.innerHTML = '<div class="small">Жақсы істер әлі жоқ.</div>'; }
+			else{
+				myKindEl.innerHTML = '';
+				kSnap.forEach(d=>{
+					const v = d.data();
+					const el = document.createElement('div'); el.className='card'; el.innerHTML = `<div><b>${v.text}</b></div><div class='small'>${v.date||''}</div>`;
+					myKindEl.appendChild(el);
+				});
+			}
+		}
+	}catch(err){ myKindEl.innerHTML = '<div class="small">Қате: '+err.message+'</div>' }
+}
+
+async function showTeacherPanel(className) {
+  document.querySelector(".register-card").style.display = "none";
+  document.getElementById("studentPanel").style.display = "none";
+  document.getElementById("teacherPanel").style.display = "block";
+
+	// build query: include class filter only when className is provided
+	let usersQuery;
+	if (className) {
+		usersQuery = query(collection(db, "users"), where("role", "==", "student"), where("class", "==", className));
+	} else {
+		usersQuery = query(collection(db, "users"), where("role", "==", "student"));
+	}
+	const qSnap = await getDocs(usersQuery);
+
+  const list = document.getElementById("studentsList");
+  if (list) {
+    list.innerHTML = "";
+    qSnap.forEach(d => {
+      const s = d.data();
+			list.innerHTML += `<div class='card-link'>${s.name} (${s.studentId})</div>`;
+    });
+  }
+
+	// populate selects for awarding/kindness and QR generation
+	const awardSel = document.getElementById('awardStudentSelect');
+	const kindSel = document.getElementById('kindnessStudentSelect');
+	const qrSel = document.getElementById('qrStudentSelect');
+	if(awardSel) awardSel.innerHTML = '';
+	if(kindSel) kindSel.innerHTML = '';
+	if(qrSel) qrSel.innerHTML = '';
+	qSnap.forEach(d => {
+		const s = d.data();
+		if(awardSel) awardSel.appendChild(Object.assign(document.createElement('option'), { value: s.studentId, textContent: s.name + ' ('+s.studentId+')' }));
+		if(kindSel) kindSel.appendChild(Object.assign(document.createElement('option'), { value: s.studentId, textContent: s.name + ' ('+s.studentId+')' }));
+		if(qrSel) qrSel.appendChild(Object.assign(document.createElement('option'), { value: s.studentId, textContent: s.name + ' ('+s.studentId+')' }));
+	});
+
+	// render some kindness ideas for teacher to pick from
+	const ideasEl = document.getElementById('kindnessIdeas');
+	if(ideasEl){
+		const ideas = [
+			'Досына кітап сыйлау',
+			'Партыны жинауға көмектесу',
+			'Сабақта белсенді қатысуға көмектесу',
+			'Сыныпқа жаңа ойын ойлап беру'
+		];
+		ideasEl.innerHTML = '';
+		ideas.forEach(i=>{ const r = document.createElement('div'); r.className='card'; r.textContent = i; ideasEl.appendChild(r); });
+	}
+}
+
+function showSignedOut() {
+  document.querySelector(".register-card").style.display = "block";
+  document.getElementById("teacherPanel").style.display = "none";
+  document.getElementById("studentPanel").style.display = "none";
+}
+
+/* -------------------------------------------------------
+    AUTH STATE
+--------------------------------------------------------*/
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return showSignedOut();
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  const profile = snap.data();
+
+	// update header actions (avatar + sign out)
+	const headerActions = document.querySelector('.actions');
+	if(headerActions){
+		headerActions.innerHTML = '';
+		const ua = document.createElement('div'); ua.className='user-area';
+		const avatar = document.createElement('div'); avatar.className='avatar'; avatar.textContent = (profile?.name || user.email || 'U')[0].toUpperCase();
+		const name = document.createElement('div'); name.className='user-name'; name.textContent = profile?.name || user.email || '';
+		const outBtn = document.createElement('button'); outBtn.className='btn secondary'; outBtn.textContent='Шығу';
+		outBtn.addEventListener('click', ()=> signOut(auth));
+		ua.appendChild(avatar); ua.appendChild(name); headerActions.appendChild(ua); headerActions.appendChild(outBtn);
+	}
+
+  if (!profile) return showStudentPanel({ name: user.email, class: "" });
+
+  if (profile.role === "teacher") showTeacherPanel(profile.class);
+  else showStudentPanel(profile);
+});
+
+/* -------------------------------------------------------
+    GOOGLE LOGIN
+--------------------------------------------------------*/
+
+const googleSign = document.getElementById("googleSign");
+
+if (googleSign) {
+  const provider = new GoogleAuthProvider();
+
+  googleSign.addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      await setDoc(doc(db, "users", result.user.uid), {
+        name: result.user.displayName || "",
+        email: result.user.email,
+        role: "student",
+        lastLogin: new Date().toISOString()
+      }, { merge: true });
+
+    } catch (e) {
+      alert("Google қате: " + e.message);
+    }
+  });
+}
+
+// Role toggle: show/hide fields depending on selected role
+const rRole = document.getElementById('r_role');
+function updateRoleFields(){
+	const studentBlock = document.getElementById('studentFields');
+	const teacherBlock = document.getElementById('teacherFields');
+	if (!rRole) return;
+	if (rRole.value === 'teacher'){
+		if (studentBlock) studentBlock.style.display = 'none';
+		if (teacherBlock) teacherBlock.style.display = 'block';
+	} else {
+		if (studentBlock) studentBlock.style.display = 'block';
+		if (teacherBlock) teacherBlock.style.display = 'none';
+	}
+}
+if (rRole) {
+	rRole.addEventListener('change', updateRoleFields);
+	// set initial state
+	updateRoleFields();
+}
+
+/* -------------------------------------------------------
+    REGISTRATION
+--------------------------------------------------------*/
+
+registerForm.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const regMsgEl = document.getElementById('regMsg');
+	regMsgEl.style.display = 'block';
+	regMsgEl.textContent = 'Жіберілуде...';
+
+	const name = r_name.value.trim();
+	const studentId = r_id.value.trim();
+	const klass = r_class.value.trim();
+	const email = r_email.value.trim();
+	const password = r_password.value;
+	const roleSel = r_role.value;
+	const teacherKey = r_teacherKey ? r_teacherKey.value.trim() : '';
+
+	try {
+		// Validate required fields per role
+		if (roleSel === "teacher") {
+			if (!teacherKey) throw new Error('Кіргізіңіз: мұғалім коды');
+			if (teacherKey !== "SUPERTEACHER2025") throw new Error('Мұғалім коды қате');
+		} else {
+			if (!studentId) throw new Error('Кіргізіңіз: Оқушы ID');
+		}
+
+		const cred = await createUserWithEmailAndPassword(auth, email, password);
+		const qrKey = Math.random().toString(36).substring(2, 10);
+
+		await setDoc(doc(db, "users", cred.user.uid), {
+			name, studentId, class: klass, email, role: roleSel, qrKey,
+			createdAt: new Date().toISOString()
+		});
+
+		regMsgEl.textContent = 'Тіркелу сәтті өтті!';
+	} catch (err) {
+		console.error(err);
+		const code = err?.code || '';
+		if (code === 'auth/email-already-in-use') regMsgEl.textContent = 'Бұл email бұрыннан тіркелген.';
+		else regMsgEl.textContent = err.message || 'Қате тіркелу кезінде.';
+	}
+});
+
+/* -------------------------------------------------------
+    LOGIN
+--------------------------------------------------------*/
+
+loginForm.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const loginMsgEl = document.getElementById('loginMsg');
+	loginMsgEl.style.display = 'block';
+	loginMsgEl.textContent = 'Кіруге тырысу...';
+	try {
+		await signInWithEmailAndPassword(auth, l_email.value.trim(), l_password.value);
+		loginMsgEl.textContent = 'Кіру сәтті өтті';
+	} catch (err) {
+		console.error(err);
+		const code = err?.code || '';
+		if (code === 'auth/invalid-login-credentials' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+			loginMsgEl.textContent = 'Email немесе пароль қате.';
+		} else {
+			loginMsgEl.textContent = err.message || 'Кіру қатесі.';
+		}
+	}
+});
+
+/* -------------------------------------------------------
+    AWARD / KINDNESS
+--------------------------------------------------------*/
+
+document.getElementById("giveAwardBtn").addEventListener("click", () => {
+  giveAward(awardStudentSelect.value, awardBadgeSelect.value, awardComment.value);
+  alert("Бейдж берілді!");
+});
+
+document.getElementById("addKindnessBtn").addEventListener("click", () => {
+  if (kindnessText.value.trim().length < 2) return alert("Мәтін өте қысқа!");
+  addKindness(kindnessStudentSelect.value, kindnessText.value.trim());
+  alert("Жақсы іс қосылды!");
+});
+
+// QR generation (teacher panel)
+if (genQRBtn) {
+	genQRBtn.addEventListener('click', async () => {
+		const sel = document.getElementById('qrStudentSelect');
+		if (!sel || !sel.value) return alert('Оқушы таңдалмады');
+		const studentId = sel.value;
+
+		// find the user doc for this studentId
+		try {
+			const q = query(collection(db, 'users'), where('studentId', '==', studentId));
+			const snap = await getDocs(q);
+			if (snap.empty) return alert('Оқушы табылмады');
+			const uDoc = snap.docs[0];
+			const u = uDoc.data();
+
+			let qrKey = u.qrKey;
+			if (!qrKey) {
+				qrKey = Math.random().toString(36).substring(2, 10);
+				await setDoc(doc(db, 'users', uDoc.id), { qrKey }, { merge: true });
+			}
+
+			const url = `https://senin-sait.com/parent-view.html?key=${qrKey}`;
+
+			// load qrcode lib if needed
+			await new Promise((res, rej) => {
+				if (window.QRCode && window.QRCode.toCanvas) return res();
+				const s = document.createElement('script');
+				s.src = 'https://cdn.jsdelivr.net/npm/qrcode';
+				s.onload = () => res();
+				s.onerror = (e) => rej(new Error('QR lib failed to load'));
+				document.head.appendChild(s);
+			});
+
+			const box = document.getElementById('qrBox');
+			const urlEl = document.getElementById('qrUrl');
+			if (box) box.innerHTML = '';
+			const canvas = document.createElement('canvas');
+			if (box) box.appendChild(canvas);
+
+			await new Promise((res, rej) => {
+				try {
+					QRCode.toCanvas(canvas, url, { width: 220 }, function(err) {
+						if (err) return rej(err);
+						res();
+					});
+				} catch (e) { rej(e); }
+			});
+
+			if (urlEl) urlEl.textContent = url;
+		} catch (err) {
+			console.error(err);
+			alert('QR жасау қателігі: ' + (err.message || err));
+		}
+	});
+}
+
+// demo seeder: create two example student profiles in Firestore
+if (seedDemoBtn) {
+	seedDemoBtn.addEventListener('click', async () => {
+		try {
+			if (!auth.currentUser) return alert('Алдымен мұғалім ретінде кіріңіз');
+			// get teacher profile to use same class
+			const tSnap = await getDoc(doc(db, 'users', auth.currentUser.uid));
+			const t = tSnap.data() || {};
+			const klass = t.class || 'Demo';
+
+			const demo = [
+				{ name: 'Меруерт', studentId: 'MERUERT01' },
+				{ name: 'Ерлан', studentId: 'ERLAN02' }
+			];
+
+			for (const s of demo) {
+				const qrKey = Math.random().toString(36).substring(2, 10);
+				await addDoc(collection(db, 'users'), {
+					name: s.name,
+					studentId: s.studentId,
+					class: klass,
+					email: (s.studentId + '@example.com').toLowerCase(),
+					role: 'student',
+					qrKey,
+					createdAt: new Date().toISOString()
+				});
+			}
+
+			alert('2 demo ученика добавлены в класс: ' + klass);
+			// refresh teacher panel lists
+			showTeacherPanel(klass);
+		} catch (err) {
+			console.error(err);
+			alert('Ошибка при добавлении demo учеников: ' + (err.message || err));
+		}
+	});
+}
+
+</script>
+</body>
+</html> 

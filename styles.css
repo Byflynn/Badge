@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root{
+  /* lighter NeoGlass palette (same mood but airier) */
+  --bg:#051428; /* deep navy base */
+  --card: rgba(255,255,255,0.02);
+  --muted:#aeb8d1;
+  --accent:#6b74ff; /* softer violet-blue */
+  --accent-2:#9a6cf8; /* softer purple */
+  --glow: rgba(139,92,246,0.10);
+  --glass: rgba(255,255,255,0.02);
+  --radius:14px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(1200px 600px at 8% 12%, rgba(18,40,80,0.40), transparent 12%),
+              radial-gradient(900px 420px at 90% 86%, rgba(120,62,150,0.28), transparent 12%),
+              linear-gradient(180deg,#051428 0%, #071428 46%, #07131a 100%);
+  color:#eaf0ff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.55;
+}
+
+.container{
+  max-width:1200px;
+  margin:28px auto;
+  padding:28px 20px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+.site-brand{
+  display:flex;align-items:center;gap:14px;
+}
+.site-logo{
+  width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;box-shadow:0 10px 30px rgba(88,42,137,0.18);
+}
+.site-logo-img{width:100%;height:100%;object-fit:contain;border-radius:12px;display:block}
+.site-title{font-weight:700;font-size:20px}
+.site-sub{font-size:13px;color:var(--muted)}
+
+.actions{display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:600;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,0.12)}
+.btn.secondary{background:white;color:var(--accent);border:1px solid rgba(37,99,235,0.12)}
+
+/* Google button style */
+.btn.google{background:white;color:#222;border:1px solid rgba(0,0,0,0.06);display:inline-flex;align-items:center;gap:10px;padding:10px 12px}
+.btn.google:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.btn.google::before{content:'';width:18px;height:18px;background-image:url('https://www.google.com/favicon.ico');background-size:contain;background-repeat:no-repeat;display:inline-block}
+
+.hero{
+  /* glass panel — lighter and airier */
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));
+  border-radius:18px;
+  padding:20px 22px;
+  margin-bottom:26px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.35), inset 0 1px 0 rgba(255,255,255,0.01);
+  border:1px solid rgba(255,255,255,0.02);
+  backdrop-filter: blur(6px) saturate(110%);
+  display:block;
+}
+
+/* header user area */
+.user-area{display:flex;gap:12px;align-items:center}
+.avatar{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+.user-name{font-size:13px;color:#e6eef8}
+.hero-text{max-width:720px}
+.hero h1{margin:0;font-size:34px;letter-spacing:0.2px;color:#eff4ff}
+.hero p{margin:10px 0 0;color:var(--muted);max-width:640px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.grid{grid-template-columns:1fr}.hero{flex-direction:column;align-items:flex-start}}
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.005));
+  padding:16px;border-radius:12px;
+  box-shadow:0 6px 18px rgba(3,8,20,0.32);
+  border:1px solid rgba(255,255,255,0.02);
+}
+.card h2{margin:0 0 8px;font-size:16px}
+.small{font-size:13px;color:var(--muted)}
+
+.badge{display:flex;
+      flex-direction:column; 
+      align-items:center;
+      gap:8px;padding:18px;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      cursor:pointer;
+      transition:transform .12s ease,box-shadow .12s ease}
+.badge:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(139,92,246,0.08)}
+.badge b{font-size:15px}
+
+/* Compact badge gallery layout for up to 4 items */
+#badgeGrid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(160px, 1fr));
+  gap:20px;
+  max-width:760px;
+  margin:18px auto 0;
+  align-items:start;
+}
+
+.badge{width:100%;padding:18px;box-shadow:0 10px 34px rgba(2,6,23,0.6);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+.badge-img{width:120px;height:120px;object-fit:cover;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);filter:drop-shadow(0 8px 18px rgba(88,42,137,0.10));}
+.badge b{font-size:16px;margin-top:8px;color:#eef3ff}
+.badge .small{font-size:13px;color:var(--muted);max-width:260px;text-align:center}
+
+@media (max-width:920px){
+  #badgeGrid{grid-template-columns:repeat(2,minmax(140px,1fr));gap:14px;margin:12px auto 0}
+  .badge-img{width:96px;height:96px}
+}
+
+@media (max-width:640px){
+  #badgeGrid{grid-template-columns:repeat(2,minmax(100px,1fr));gap:10px;margin:10px 6px 0}
+  .badge-img{width:72px;height:72px}
+  .badge{padding:10px}
+}
+
+.card-list{display:flex;flex-direction:column;gap:10px}
+.card-link{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02);cursor:pointer}
+.card-link:hover{box-shadow:0 12px 30px rgba(3,8,20,0.6)}
+
+footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px}
+
+/* focus styles for accessibility */
+:focus{outline:3px solid rgba(37,99,235,0.14);outline-offset:3px}
+
+/* utility */
+.flex{display:flex;gap:10px;align-items:center}
+
+/* small form and lists */
+.klist{display:flex;flex-direction:column;gap:8px}
+
+/* make images/icons responsive */
+img{max-width:100%;height:auto;display:block}
+
+/* Modern animated background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background: radial-gradient(900px 500px at 7% 8%, rgba(24,58,102,0.45), transparent),
+              radial-gradient(1000px 500px at 90% 88%, rgba(139,92,246,0.30), transparent);
+  pointer-events:none;
+}
+
+/* moving subtle gradient layer */
+body::after{
+  content:'';position:fixed;inset:-15% -8% -18% -8%;z-index:-3;opacity:0.65;
+  background:linear-gradient(120deg, rgba(24,58,102,0.08), rgba(139,92,246,0.06), rgba(88,42,137,0.05));
+  filter:blur(28px);transform:translateZ(0);
+  animation: floatBG 26s ease-in-out infinite;
+}
+@keyframes floatBG{0%{transform:translateY(-6px) rotate(0deg)}50%{transform:translateY(6px) rotate(1deg)}100%{transform:translateY(-6px) rotate(0deg)}}
+
+/* Hero photos: horizontal row above heading */
+.hero-photos{
+  display:flex;
+  flex-direction:row;
+  gap:16px;
+  align-items:center;
+  justify-content:flex-start;
+  width:100%;
+  margin:0 0 12px 0;
+  overflow-x:auto;
+  padding-bottom:6px;
+}
+.hero-photos::-webkit-scrollbar{height:8px}
+.hero-photos::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:8px}
+.accent-photo{
+  width:420px;
+  height:260px;
+  object-fit:cover;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.04);
+  box-shadow:0 16px 36px rgba(3,8,20,0.18);
+  flex:0 0 auto;
+}
+@media (max-width:1400px){.accent-photo{width:360px;height:220px}}
+@media (max-width:1200px){.accent-photo{width:300px;height:190px}}
+@media (max-width:980px){.accent-photo{width:260px;height:160px}}
+@media (max-width:640px){.hero-photos{flex-direction:column;align-items:center}.accent-photo{width:220px;height:140px}}
+
+/* Registration form styles */
+.register-card{
+  width:100%;
+  max-width:420px;
+  padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.02);
+  box-shadow:0 8px 18px rgba(3,8,20,0.26);
+  box-sizing:border-box;
+}
+.register-card h3{margin:0 0 8px;font-size:18px}
+.form-row{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.form-row label{font-size:13px;color:var(--muted)}
+.form-row input, .form-row select{padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);font-size:14px}
+.helper{font-size:12px;color:var(--muted)}
+.msg{padding:10px;border-radius:8px;margin-top:8px;font-size:14px}
+.msg.success{background:rgba(34,197,94,0.08);color:#166534;border:1px solid rgba(34,197,94,0.12)}
+.msg.error{background:rgba(239,68,68,0.06);color:#7f1d1d;border:1px solid rgba(239,68,68,0.12)}
+
+/* Wide screens: left column for photos+text, right column for registration */
+@media (min-width:980px){
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:22px;align-items:start}
+  .hero .hero-text{max-width:100%}
+  .register-card{margin-top:12px;margin-left:auto}
+}
+
+/* Left column wrapper (photos + text) styling */
+.hero-left{display:flex;flex-direction:column;gap:14px}
+.hero-left .hero-text{order:2}
+.hero-left .hero-photos{order:1}
+
+/* student photo at bottom of students card */
+.student-photo-wrap{margin-top:14px}
+.student-photo{width:100%;height:220px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 26px rgba(3,8,20,0.14)}
+@media (max-width:920px){.student-photo{height:160px}}
+@media (max-width:720px){.student-photo-wrap{display:none}}
+
+/* Ensure register card centers on smaller screens and doesn't overflow */
+@media (max-width:979px){
+  .register-card{margin:12px auto 0;}
+}
+
+.badge-img{
+  width:160px;
+  height:160px;
+  object-fit:cover;
+  margin-bottom:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.04);
+  filter:drop-shadow(0 10px 22px rgba(88,42,137,0.14));
+}
+@media (max-width:920px){.badge-img{width:120px;height:120px}}
+@media (max-width:640px){.badge-img{width:80px;height:80px}}
+

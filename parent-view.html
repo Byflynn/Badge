@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <title>Оқушы профилі</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="padding:20px; max-width:700px; margin:auto;">
+
+  <h1 id="studentName">Жүктелуде...</h1>
+  <p id="studentClass"></p>
+
+  <h2>Бейдждер</h2>
+  <div id="badgeList"></div>
+
+  <h2>Достық Банкі</h2>
+  <div id="kindnessList"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { 
+      getFirestore, collection, getDocs, query, where 
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyClcGOXzsKJJznQBVzwBSyyOgjNAJ_01dU",
+      authDomain: "beydj-site-prototype.firebaseapp.com",
+      projectId: "beydj-site-prototype",
+      storageBucket: "beydj-site-prototype.appspot.com",
+      messagingSenderId: "431985222918",
+      appId: "1:431985222918:web:a774d018d9087fc67dea87"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ---- QR KEY алу ----
+    const params = new URLSearchParams(window.location.search);
+    const key = params.get("key");
+
+    if (!key) {
+      document.body.innerHTML = "<h2>QR жарамсыз</h2>";
+    }
+
+    // ---- Оқушыны табу ----
+    async function loadStudent() {
+      const q = query(collection(db, "users"), where("qrKey", "==", key));
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        document.body.innerHTML = "<h2>Оқушы табылмады</h2>";
+        return;
+      }
+
+      const s = snap.docs[0].data();
+
+      document.getElementById("studentName").textContent = s.name;
+      document.getElementById("studentClass").textContent = s.class + " сыныбы";
+
+      loadBadges(s.studentId);
+      loadKindness(s.studentId);
+    }
+
+    // ---- Бейдждер ----
+    async function loadBadges(studentId) {
+      const q = query(collection(db, "awards"), where("studentId", "==", studentId));
+      const snap = await getDocs(q);
+
+      const container = document.getElementById("badgeList");
+
+      snap.forEach(d => {
+        const a = d.data();
+        container.innerHTML += `<div class="card">${a.badgeCode} — ${a.comment}</div>`;
+      });
+    }
+
+    // ---- Достық Банкі ----
+    async function loadKindness(studentId) {
+      const q = query(collection(db, "kindness"), where("studentId", "==", studentId));
+      const snap = await getDocs(q);
+
+      const container = document.getElementById("kindnessList");
+
+      snap.forEach(d => {
+        const k = d.data();
+        container.innerHTML += `<div class="card">${k.text} (${k.date})</div>`;
+      });
+    }
+
+    loadStudent();
+  </script>
+</body>
+</html>
